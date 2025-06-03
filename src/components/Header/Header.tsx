@@ -3,6 +3,11 @@ import SelectListName from "../SelectList/SelectList";
 import { usePageTitle } from "../../contexts/PageTitleContext";
 import { useMenu } from "../../contexts/MenuContext";
 
+import IconMenu from "../../assets/icons/menu_icon.svg";
+import IconCloseMenu from "../../assets/icons/close_icon.svg";
+import IconSubMenu from "../../assets/icons/submenu_icon.svg";
+import IconBackPage from "../../assets/icons/arrow_back_icon.svg";
+
 type Props = {
   isMenuOpen: boolean;
   toggleMenu: () => void;
@@ -19,12 +24,8 @@ export default function Header({ isMenuOpen, toggleMenu }: Props) {
     <>
       <header id="header">
         <div>
-          <span
-            id="menuIcon"
-            className="material-symbols-outlined"
-            onClick={toggleMenu}
-          >
-            {isMenuOpen ? "close" : "menu"}
+          <span id="menuIcon" onClick={toggleMenu}>
+            {<img src={isMenuOpen ? IconCloseMenu : IconMenu} />}
           </span>
         </div>
         {title === "Home" ? (
@@ -33,11 +34,8 @@ export default function Header({ isMenuOpen, toggleMenu }: Props) {
               Lista: <SelectListName />
             </div>
             <div onClick={toggleSubMenu}>
-              <span
-                className="material-symbols-outlined"
-                id="action-option-list"
-              >
-                more_vert
+              <span id="action-option-list">
+                <img src={IconSubMenu} />
               </span>
             </div>
           </>
@@ -45,11 +43,8 @@ export default function Header({ isMenuOpen, toggleMenu }: Props) {
           <>
             <div id="currentScreen">{title}</div>
             <div onClick={voltar}>
-              <span
-                className="material-symbols-outlined"
-                id="action-option-list"
-              >
-                {title !== "Configurações" && "arrow_back"}
+              <span id="action-option-list">
+                {title !== "Configurações" && <img src={IconBackPage} />}
               </span>
             </div>
           </>

@@ -5,6 +5,11 @@ import { useSettings } from "../../contexts/SetingsContext";
 import { useMenu } from "../../contexts/MenuContext";
 import SubMenu from "../../components/SubMenuLists/SubMenu";
 
+import IconShoppingCart from "../../assets/icons/shopping_cart_icon.svg";
+import IconFilterCart from "../../assets/icons/filter_alt_icon.svg";
+import IconDelete from "../../assets/icons/delete_icon.svg";
+import IconCloseFilter from "../../assets/icons/close_icon.svg";
+
 export type ListType = {
   id: number;
   nome: string;
@@ -309,19 +314,15 @@ export default function Home() {
             <thead>
               <tr>
                 <th>
-                  <span className="material-symbols-outlined">
-                    shopping_cart
-                  </span>
+                  <img src={IconShoppingCart} />
                 </th>
                 <th id="descricao-table">
                   Descrição
-                  <span
-                    className="material-symbols-outlined"
+                  <img
                     id="icone-filtro"
                     onClick={openFiltro}
-                  >
-                    filter_alt
-                  </span>
+                    src={IconFilterCart}
+                  />
                   <div id="filtro">
                     <input
                       type="text"
@@ -331,7 +332,7 @@ export default function Home() {
                       onFocus={selectContent}
                     />
                     <button onClick={closeFiltro}>
-                      <span className="material-symbols-outlined">close</span>
+                      <img src={IconCloseFilter} />
                     </button>
                   </div>
                 </th>
@@ -394,9 +395,7 @@ export default function Home() {
                         className="action"
                         onClick={() => deleteProduct(index)}
                       >
-                        <span className="material-symbols-outlined">
-                          delete
-                        </span>
+                        <img src={IconDelete} />
                       </td>
                     </tr>
                   )
