@@ -1,0 +1,27 @@
+.fade.sub-menu {
+  background-color: transparent;
+}
+
+#sub-menu {
+  top: 5px;
+  right: 5px;
+  background-color: #fff;
+  max-width: 250px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: absolute;
+  z-index: 1;
+}
+
+.li-sub-menu {
+  display: flex;
+  align-items: center;
+  padding: 3px 50px 3px 10px;
+  font-size: 15px;
+}
+
+.li-sub-menu:active {
+  background-color: #05a9f5c3;
+}

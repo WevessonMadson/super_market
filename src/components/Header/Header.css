@@ -1,0 +1,12 @@
+#header {
+  background-color: #05a2f5;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+}
+
+#currentScreen {
+  font-weight: bold;
+}

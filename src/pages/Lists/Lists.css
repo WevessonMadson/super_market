@@ -1,0 +1,5 @@
+@media screen and (min-height: 710px) {
+  #container {
+    max-height: 650px;
+  }
+}

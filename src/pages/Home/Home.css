@@ -1,0 +1,205 @@
+#listName {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-weight: bolder;
+  font-size: 16px;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: auto;
+}
+
+#formDataCad {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  margin: 10px 0px;
+  padding: 0px 5px;
+}
+
+#labelCad,
+#inputsCad {
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#labelCad {
+  font-size: 18px;
+}
+
+#inputsCad input {
+  width: 150px;
+  padding: 2px;
+}
+
+#totalCarr {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+#totalCarr p {
+  font-size: 18px;
+  font-weight: 400;
+  background-color: #e5f1fc;
+  padding: 5px;
+  border: 0.5px solid black;
+  border-radius: 7px;
+}
+
+#totLista {
+  font-weight: 600;
+}
+
+#container {
+  width: 98%;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  justify-items: center;
+  position: relative;
+  overflow-y: scroll;
+  max-height: 500px;
+}
+
+#container table thead {
+  background-color: #fff;
+  position: sticky;
+  top: 0;
+}
+
+#descricao-table {
+  align-items: baseline;
+  justify-content: center;
+  border-spacing: 0px;
+}
+
+#icone-filtro {
+  font-size: 21px;
+}
+
+#filtro {
+  background-color: #fff;
+  position: absolute;
+  left: 25px;
+  max-width: 120px;
+  display: none;
+  border: 1px solid #000;
+  gap: 3px;
+  border-radius: 3px;
+}
+
+#filtro input {
+  width: 80%;
+  border: none;
+  padding-left: 3px;
+}
+
+#filtro input:focus {
+  outline: none;
+}
+
+#filtro button {
+  border: none;
+  background-color: rgba(255, 0, 0, 0.283);
+}
+
+table {
+  border: 1px solid rgba(128, 151, 144, 0.678);
+  width: 100%;
+}
+
+#tbody tr:nth-child(odd) {
+  background-color: rgb(218, 218, 218);
+}
+
+.inputQtd,
+.inputPreco {
+  background-color: transparent;
+  text-align: center;
+  border: 0.1px solid;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.inputPreco {
+  width: 60px;
+}
+
+.inputQtd {
+  width: 40px;
+}
+
+#tbody th {
+  padding: 2px;
+}
+
+#tbody td {
+  text-align: center;
+  word-break: break-all;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.marcado {
+  text-decoration: line-through;
+}
+
+.fade-zeramento {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  background-color: #000000e4;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+.modal-zeramento {
+  width: 98%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.modal-zeramento__info {
+  font-size: 20px;
+}
+
+.modal-zeramento__botoes {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.modal-zeramento__botao {
+  width: 60%;
+  padding: 7px 0px;
+  font-weight: 700;
+  border-radius: 10px;
+  background-color: #dfdbdb;
+}
+
+.modal-zeramento__botao__active {
+  background-color: #05a9f5c3;
+}
+
+@media screen and (min-height: 710px) {
+  #container {
+    max-height: 650px;
+  }
+}

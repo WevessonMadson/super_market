@@ -1,0 +1,29 @@
+.content-privacy-policy {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+footer {
+  text-align: center;
+}
