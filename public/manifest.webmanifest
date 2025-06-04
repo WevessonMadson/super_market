@@ -5,9 +5,7 @@
   "display": "standalone",
   "name": "superMarket",
   "orientation": "portrait",
-  "scope": "https://wevessonmadson.github.io/superMarket/",
   "short_name": "superMarket",
-  "start_url": "https://wevessonmadson.github.io/superMarket/",
   "theme_color": "#05a2f5",
   "categories": [
     "finance",
