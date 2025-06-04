@@ -1,17 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePageTitle } from "../../contexts/PageTitleContext";
 import "./Suggestion.css";
 
 export default function Suggestion() {
   const { setTitle } = usePageTitle();
+  const [tipo, setTipo] = useState<"sugerir melhoria" | "reportar bug">(
+    "sugerir melhoria"
+  );
+  const [mensagem, setMensagem] = useState("");
+  const mensagemRef = useRef<HTMLTextAreaElement>(null);
+
+  const sugerir = () => {
+    if (mensagem.trim().length < 50) {
+      alert("Mensagem muito curta, descreva mais detalhes, por favor.");
+      mensagemRef.current?.focus();
+      return;
+    }
+
+    const textSend = `Olá, gostaria de *${tipo}* no app *superMarket*. *Mensagem:* ${mensagem}`;
+
+    setTipo("sugerir melhoria");
+    setMensagem("");
+
+    window.open(
+      `https://api.whatsapp.com/send?phone=5581973161634&text=${textSend}`,
+      "_blank"
+    );
+  };
 
   useEffect(() => {
     setTitle("Sugerir / Reportar");
   }, [setTitle]);
-
-  const sugerir = () => {
-    console.log("teste");
-  };
 
   return (
     <>
@@ -32,8 +51,8 @@ export default function Suggestion() {
                 type="radio"
                 name="opcao"
                 id="melhoria"
-                value="sugerir melhoria"
-                checked
+                checked={tipo === "sugerir melhoria"}
+                onChange={() => setTipo("sugerir melhoria")}
               />
               Sugerir melhoria
             </label>
@@ -42,7 +61,8 @@ export default function Suggestion() {
                 type="radio"
                 name="opcao"
                 id="reportar"
-                value="reportar bug"
+                checked={tipo === "reportar bug"}
+                onChange={() => setTipo("reportar bug")}
               />
               Reportar problema
             </label>
@@ -50,6 +70,9 @@ export default function Suggestion() {
           <textarea
             id="input-sugestion"
             placeholder="Detalhe aqui sua sugestão..."
+            ref={mensagemRef}
+            value={mensagem}
+            onChange={(e) => setMensagem(e.target.value)}
           ></textarea>
           <button
             id="send-sugestion"
