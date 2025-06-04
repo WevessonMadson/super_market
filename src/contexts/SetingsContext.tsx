@@ -6,8 +6,8 @@ export type SettingsType = {
 
 type SettingsContextType = {
   configState: SettingsType;
-  saveConfig: (config: SettingsType) => void;
-  getConfigOnLocalStorage: () => SettingsType;
+  originalConfig: SettingsType;
+  saveConfig: () => void;
   setConfigState: (config: SettingsType) => void;
   compareSettings: () => boolean;
 };
@@ -24,10 +24,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [configState, setConfigState] = useState<SettingsType>(initialConfig);
-
-  function setConfigOnLocalStorage(config: SettingsType) {
-    localStorage.setItem("configSuperMarket", JSON.stringify(config));
-  }
+  const [originalConfig, setOriginalConfig] =
+    useState<SettingsType>(initialConfig);
 
   function getConfigOnLocalStorage(): SettingsType {
     const configLocalStorage: string =
@@ -38,31 +36,49 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   function saveConfig() {
-    setConfigOnLocalStorage(configState);
+    localStorage.setItem("configSuperMarket", JSON.stringify(configState));
+    setOriginalConfig(configState);
+  }
+
+  function settingsIquals() {
+    return configState.sumOnlyChecked === originalConfig.sumOnlyChecked;
   }
 
   function compareSettings() {
-    const configOnLocalStorage = getConfigOnLocalStorage();
-    return configState.sumOnlyChecked !== configOnLocalStorage.sumOnlyChecked;
+    if (settingsIquals()) {
+      return true;
+    } else {
+      if (!confirm("As alterações não foram salvas. Deseja realmente sair?"))
+        return false;
+      else {
+        closeWithoutSave();
+        return true;
+      }
+    }
+  }
+
+  function closeWithoutSave() {
+    setConfigState(originalConfig);
   }
 
   useEffect(() => {
     const config = getConfigOnLocalStorage();
-    if (config.sumOnlyChecked !== configState.sumOnlyChecked) {
+    if (!settingsIquals()) {
       setConfigState(config);
+      setOriginalConfig(config);
       return;
     }
 
-    setConfigOnLocalStorage(config);
+    saveConfig();
   }, []);
 
   return (
     <SettingsContext.Provider
       value={{
         configState,
+        originalConfig,
         setConfigState,
         saveConfig,
-        getConfigOnLocalStorage,
         compareSettings,
       }}
     >

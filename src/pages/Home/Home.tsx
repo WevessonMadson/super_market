@@ -32,7 +32,7 @@ type StateType = {
 
 export default function Home() {
   const { setTitle } = usePageTitle();
-  const { getConfigOnLocalStorage } = useSettings();
+  const { originalConfig } = useSettings();
   const { isSubMenuOpen, toggleSubMenu } = useMenu();
 
   const inputDescricao = useRef<HTMLInputElement>(null);
@@ -54,12 +54,10 @@ export default function Home() {
   };
 
   const calculateTotalList = (listOfProducts: ProductType[]): number => {
-    const config = getConfigOnLocalStorage();
-
     let total = 0;
 
     listOfProducts.forEach(({ preco, quantidade, checked }: ProductType) => {
-      if (config.sumOnlyChecked) {
+      if (originalConfig.sumOnlyChecked) {
         if (checked) {
           total += quantidade * preco;
         }

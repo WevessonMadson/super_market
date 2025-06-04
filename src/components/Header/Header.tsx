@@ -7,18 +7,27 @@ import IconMenu from "../../assets/icons/menu_icon.svg";
 import IconCloseMenu from "../../assets/icons/close_icon.svg";
 import IconSubMenu from "../../assets/icons/submenu_icon.svg";
 import IconBackPage from "../../assets/icons/arrow_back_icon.svg";
+import { useSettings } from "../../contexts/SetingsContext";
 
 type Props = {
   isMenuOpen: boolean;
   toggleMenu: () => void;
+  closeMenu: () => void;
 };
 
-export default function Header({ isMenuOpen, toggleMenu }: Props) {
+export default function Header({ isMenuOpen, toggleMenu, closeMenu }: Props) {
   const { title } = usePageTitle();
+  const { compareSettings } = useSettings();
 
   const { toggleSubMenu } = useMenu();
 
-  const voltar = () => window.history.back();
+  const voltar = () => {
+    closeMenu();
+
+    const autorizado = compareSettings();
+
+    if (autorizado) window.history.back();
+  };
 
   return (
     <>
@@ -34,18 +43,14 @@ export default function Header({ isMenuOpen, toggleMenu }: Props) {
               Lista: <SelectListName />
             </div>
             <div onClick={toggleSubMenu}>
-              <span id="action-option-list">
-                <img src={IconSubMenu} />
-              </span>
+              <img src={IconSubMenu} />
             </div>
           </>
         ) : (
           <>
             <div id="currentScreen">{title}</div>
             <div onClick={voltar}>
-              <span id="action-option-list">
-                {title !== "Configurações" && <img src={IconBackPage} />}
-              </span>
+              <img src={IconBackPage} />
             </div>
           </>
         )}

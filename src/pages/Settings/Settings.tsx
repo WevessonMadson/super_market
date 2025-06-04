@@ -1,18 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import "./Settings.css";
 import { useEffect } from "react";
 import { usePageTitle } from "../../contexts/PageTitleContext";
 import { useSettings } from "../../contexts/SetingsContext";
+import "./Settings.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const { setTitle } = usePageTitle();
-  const {
-    configState,
-    setConfigState,
-    saveConfig,
-    compareSettings,
-    getConfigOnLocalStorage,
-  } = useSettings();
+  const { configState, setConfigState, saveConfig, compareSettings } =
+    useSettings();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,18 +15,13 @@ export default function Settings() {
   }, [setTitle]);
 
   const sair = () => {
-    if (compareSettings()) {
-      if (confirm("As alterações não foram salvas. Deseja realmente sair?")) {
-        setConfigState(getConfigOnLocalStorage());
-        navigate("/");
-      }
-    } else {
-      navigate("/");
-    }
+    const autorizado = compareSettings();
+
+    if (autorizado) navigate("/");
   };
 
   const salvar = () => {
-    saveConfig(configState);
+    saveConfig();
     alert("Configurações salvas com sucesso!");
   };
 

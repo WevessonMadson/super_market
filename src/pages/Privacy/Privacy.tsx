@@ -17,17 +17,19 @@ export default function Privacy() {
         <h2>Quais informações coletamos?</h2>
         <p>Podemos coletar as seguintes informações:</p>
         <ul>
-          <li>Informações de contato (nome, email)</li>
-          <li>Dados de uso do aplicativo</li>
-          <li>Informações do dispositivo</li>
+          <li className="lista-privacite">
+            Informações de contato (nome, email)
+          </li>
+          <li className="lista-privacite">Dados de uso do aplicativo</li>
+          <li className="lista-privacite">Informações do dispositivo</li>
         </ul>
 
         <h2>Como utilizamos suas informações?</h2>
         <p>Utilizamos as informações coletadas para:</p>
         <ul>
-          <li>Melhorar a experiência do usuário</li>
-          <li>Personalizar o conteúdo</li>
-          <li>Fornecer suporte técnico</li>
+          <li className="lista-privacite">Melhorar a experiência do usuário</li>
+          <li className="lista-privacite">Personalizar o conteúdo</li>
+          <li className="lista-privacite">Fornecer suporte técnico</li>
         </ul>
 
         <h2>Como compartilhamos suas informações?</h2>
@@ -35,8 +37,10 @@ export default function Privacy() {
           Não compartilhamos suas informações pessoais com terceiros, exceto:
         </p>
         <ul>
-          <li>Com empresas que prestam serviços em nosso nome</li>
-          <li>Quando exigido por lei</li>
+          <li className="lista-privacite">
+            Com empresas que prestam serviços em nosso nome
+          </li>
+          <li className="lista-privacite">Quando exigido por lei</li>
         </ul>
 
         <h2>Como protegemos suas informações?</h2>

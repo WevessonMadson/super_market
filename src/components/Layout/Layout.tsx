@@ -8,7 +8,11 @@ const Layout = () => {
 
   return (
     <>
-      <Header isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+      <Header
+        isMenuOpen={isMenuOpen}
+        toggleMenu={toggleMenu}
+        closeMenu={closeMenu}
+      />
       {isMenuOpen && <MenuApp onClose={closeMenu} />}
       <>
         <Outlet />
