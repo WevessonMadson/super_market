@@ -9,6 +9,7 @@ import IconShoppingCart from "../../assets/icons/shopping_cart_icon.svg";
 import IconFilterCart from "../../assets/icons/filter_alt_icon.svg";
 import IconDelete from "../../assets/icons/delete_icon.svg";
 import IconCloseFilter from "../../assets/icons/close_icon.svg";
+import { useLists } from "../../contexts/ListsContext";
 
 export type ListType = {
   id: number;
@@ -24,8 +25,8 @@ type ProductType = {
   checked: boolean;
 };
 
-type StateType = {
-  listOfList: ListType[];
+export type StateType = {
+  // listOfList: ListType[];
   listProducts: ProductType[];
   total: number;
 };
@@ -34,11 +35,12 @@ export default function Home() {
   const { setTitle } = usePageTitle();
   const { originalConfig } = useSettings();
   const { isSubMenuOpen, toggleSubMenu } = useMenu();
+  const { listOfLists } = useLists();
 
   const inputDescricao = useRef<HTMLInputElement>(null);
 
   const [stateList, setStateList] = useState<StateType>({
-    listOfList: [],
+    // listOfList: [],
     listProducts: [],
     total: 0,
   });
@@ -84,50 +86,50 @@ export default function Home() {
     return noCheck.concat(check);
   }
 
-  function renderDataOnLoad() {
-    const listOfList = updateOptionsList();
+  // function renderDataOnLoad() {
+  //   const listOfList = updateOptionsList();
 
-    const listProducts = JSON.parse(
-      localStorage.getItem(listOfList[0].nome) || "[]"
-    );
-    if (listProducts.length) {
-      let total = calculateTotalList(listProducts);
-      setStateList({ listOfList, listProducts, total });
-    } else {
-      setStateList({ ...stateList, listOfList });
-    }
+  //   const listProducts = JSON.parse(
+  //     localStorage.getItem(listOfList[0].nome) || "[]"
+  //   );
+  //   if (listProducts.length) {
+  //     let total = calculateTotalList(listProducts);
+  //     setStateList({ listOfList, listProducts, total });
+  //   } else {
+  //     setStateList({ ...stateList, listOfList });
+  //   }
 
-    function updateOptionsList() {
-      let listName = document.querySelector("#listName");
-      const listOfList: ListType[] = JSON.parse(
-        localStorage.getItem("listOfList") || "[]"
-      );
+  //   function updateOptionsList() {
+  //     // let listName = document.querySelector("#listName");
+  //     const listOfList: ListType[] = JSON.parse(
+  //       localStorage.getItem("listOfList") || "[]"
+  //     );
 
-      if (listOfList.length) {
-        let options = "";
-        const selected = listOfList.filter((lista) => lista.selected === true);
-        const unSelected = listOfList.filter(
-          (lista) => lista.selected === false
-        );
-        const listFinal = selected.concat(unSelected);
+  //     if (listOfList.length) {
+  //       let options = "";
+  //       const selected = listOfList.filter((lista) => lista.selected === true);
+  //       const unSelected = listOfList.filter(
+  //         (lista) => lista.selected === false
+  //       );
+  //       const listFinal = selected.concat(unSelected);
 
-        for (let i = 0; i < listFinal.length; i++) {
-          options += `<option value="${listFinal[i].nome}">${listFinal[i].nome}</option>`;
-        }
+  //       for (let i = 0; i < listFinal.length; i++) {
+  //         options += `<option value="${listFinal[i].nome}">${listFinal[i].nome}</option>`;
+  //       }
 
-        if (listName?.innerHTML) listName.innerHTML = options;
+  //       if (listName?.innerHTML) listName.innerHTML = options;
 
-        return listFinal;
-      } else {
-        const newListOfList = [{ id: 1, nome: "superMarket", selected: true }];
-        localStorage.setItem("listOfList", JSON.stringify(newListOfList));
+  //       return listFinal;
+  //     } else {
+  //       const newListOfList = [{ id: 1, nome: "superMarket", selected: true }];
+  //       localStorage.setItem("listOfList", JSON.stringify(newListOfList));
 
-        listName!.innerHTML = `<option value="superMarket">superMarket</option>`;
+  //       listName!.innerHTML = `<option value="superMarket">superMarket</option>`;
 
-        return newListOfList;
-      }
-    }
-  }
+  //       return newListOfList;
+  //     }
+  //   }
+  // }
 
   function addProduct(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -148,14 +150,14 @@ export default function Home() {
       quantidade,
       preco,
       checked: false,
-      idLista: stateList.listOfList[0].id,
+      idLista: listOfLists[0].id,
     });
 
     let total = calculateTotalList(listProducts);
     setStateList({ ...stateList, listProducts, total });
 
     localStorage.setItem(
-      stateList.listOfList[0].nome,
+      listOfLists[0].nome,
       JSON.stringify(stateList.listProducts)
     );
 
@@ -177,10 +179,7 @@ export default function Home() {
 
       let total = calculateTotalList(listProducts);
       setStateList({ ...stateList, listProducts, total });
-      localStorage.setItem(
-        stateList.listOfList[0].nome,
-        JSON.stringify(listProducts)
-      );
+      localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
     }
   }
 
@@ -193,10 +192,7 @@ export default function Home() {
     let total = calculateTotalList(listProducts);
 
     setStateList({ ...stateList, listProducts, total });
-    localStorage.setItem(
-      stateList.listOfList[0].nome,
-      JSON.stringify(listProducts)
-    );
+    localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
   }
 
   function atualizaSubtotalProduto(
@@ -233,7 +229,14 @@ export default function Home() {
   }, [setTitle]);
 
   useEffect(() => {
-    renderDataOnLoad();
+    console.log(listOfLists[0].nome);
+    const listProducts = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    );
+    if (listProducts.length) {
+      let total = calculateTotalList(listProducts);
+      setStateList({ listProducts, total });
+    }
   }, []);
 
   return (

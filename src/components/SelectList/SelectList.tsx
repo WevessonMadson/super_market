@@ -1,14 +1,18 @@
-import { useState } from "react";
+import type React from "react";
+import { useLists } from "../../contexts/ListsContext";
 
 export default function SelectListName() {
-  const [listName, setListName] = useState("superMarket");
+  const { listOfLists, selectList } = useLists();
 
-  const updateListName = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e) updateListName(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const index = e.target.value;
+
+    console.log(index);
+
+    selectList(Number(index));
   };
+
   return (
-    <select id="listName" onChange={() => updateListName(e.target.value)}>
-      <option>{listName}</option>
-    </select>
+    
   );
 }

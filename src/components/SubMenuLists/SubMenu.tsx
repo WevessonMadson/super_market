@@ -7,24 +7,68 @@ import IconEditList from "../../assets/icons/edit_24_submenu.svg";
 import IconDeleteList from "../../assets/icons/delete_icon.svg";
 import IconZeraLista from "../../assets/icons/restart_alt_24_submenu.svg";
 import IconDuplicateLista from "../../assets/icons/file_copy_submenu.svg";
+import { useLists } from "../../contexts/ListsContext";
 
 type SubMenuProps = {
   onClose: () => void;
 };
 
 export default function SubMenu({ onClose }: SubMenuProps) {
-  const addList = () => null;
-  const exportList = () => null;
-  const importList = () => null;
-  const editList = () => null;
-  const deleteList = () => null;
-  const resetList = () => null;
-  const duplicateList = () => null;
+  const { addList, listNameExists, listOfLists } = useLists();
+
+  const addHandle = async () => {
+    console.log(listOfLists);
+    // pegar o nome da lista nom prompt e retorna se não for passado
+    let nameList = prompt("Como você quer chamar a nova lista?");
+    if (!nameList || !nameList.trim()) return;
+
+    console.log(listOfLists);
+    console.log(nameList);
+
+    // ver se não tem nenhuma com o nome
+    const nomeJaExiste = listNameExists(nameList);
+
+    // if tiver avisa e retorna
+    if (nomeJaExiste) {
+      alert("Já existe uma lista com esse nome, selecione ela.");
+      return;
+    }
+
+    // adiciona a nova lista como selected true
+    await addList(nameList);
+    console.log(listOfLists);
+  };
+
+  const exportList = () => {
+    // pega os dados da lista
+    // monta o json e chama o envio para whatsapp
+  };
+  const importList = () => {
+    // pede o json
+    // faz a inserção da lista e dos produtos
+  };
+  const editList = () => {
+    // Abre a caixa com o nome atual da lista
+    // Usuário salva depois de editar o nome
+  };
+  const deleteList = () => {
+    // pergunta se deseja realmente deletar e o nome da lista
+    // não cancelamos e retornamos, sim continuamos
+    // removemos a lista e salvamos
+  };
+  const resetList = () => {
+    // zerar preço e/ou quantidade
+    // obs.: aqui vou precisar abrir um modal
+  };
+  const duplicateList = () => {
+    // criar uma nova lista com o nome fornecido
+    // salvar uma lista de produtos no local storage com o nome da lista
+  };
 
   return (
     <div className="fade sub-menu" onClick={onClose}>
       <ul id="sub-menu">
-        <li id="addList" className="li-sub-menu" onClick={addList}>
+        <li id="addList" className="li-sub-menu" onClick={addHandle}>
           <img src={IconAddList} />
           <span className="descr-list">Nova Lista</span>
         </li>

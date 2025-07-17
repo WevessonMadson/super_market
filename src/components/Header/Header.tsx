@@ -1,5 +1,4 @@
 import "./Header.css";
-import SelectListName from "../SelectList/SelectList";
 import { usePageTitle } from "../../contexts/PageTitleContext";
 import { useMenu } from "../../contexts/MenuContext";
 
@@ -8,6 +7,7 @@ import IconCloseMenu from "../../assets/icons/close_icon.svg";
 import IconSubMenu from "../../assets/icons/submenu_icon.svg";
 import IconBackPage from "../../assets/icons/arrow_back_icon.svg";
 import { useSettings } from "../../contexts/SetingsContext";
+import { useLists } from "../../contexts/ListsContext";
 
 type Props = {
   isMenuOpen: boolean;
@@ -18,8 +18,8 @@ type Props = {
 export default function Header({ isMenuOpen, toggleMenu, closeMenu }: Props) {
   const { title } = usePageTitle();
   const { compareSettings } = useSettings();
-
   const { toggleSubMenu } = useMenu();
+  const { listOfLists, selectList } = useLists();
 
   const voltar = () => {
     closeMenu();
@@ -28,6 +28,13 @@ export default function Header({ isMenuOpen, toggleMenu, closeMenu }: Props) {
 
     if (autorizado) window.history.back();
   };
+
+  function handleSelectChange(
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void {
+    const index = event.target.value;
+    selectList(Number(index));
+  }
 
   return (
     <>
@@ -40,7 +47,18 @@ export default function Header({ isMenuOpen, toggleMenu, closeMenu }: Props) {
         {title === "Home" ? (
           <>
             <div id="listSelected">
-              Lista: <SelectListName />
+              Lista:
+              <select
+                id="listName"
+                value={listOfLists[0].nome}
+                onChange={handleSelectChange}
+              >
+                {listOfLists.map((list, index) => (
+                  <option key={index} value={index}>
+                    {list.nome}
+                  </option>
+                ))}
+              </select>
             </div>
             <div onClick={toggleSubMenu}>
               <img src={IconSubMenu} />
