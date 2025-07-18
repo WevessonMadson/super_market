@@ -14,29 +14,24 @@ type SubMenuProps = {
 };
 
 export default function SubMenu({ onClose }: SubMenuProps) {
-  const { addList, listNameExists, listOfLists } = useLists();
+  const { addList, listNameExists } = useLists();
 
   const addHandle = async () => {
-    console.log(listOfLists);
-    // pegar o nome da lista nom prompt e retorna se não for passado
+    // pegar o nome da lista no prompt e retorna se não for passado
     let nameList = prompt("Como você quer chamar a nova lista?");
     if (!nameList || !nameList.trim()) return;
-
-    console.log(listOfLists);
-    console.log(nameList);
 
     // ver se não tem nenhuma com o nome
     const nomeJaExiste = listNameExists(nameList);
 
-    // if tiver avisa e retorna
+    // se tiver avisa e retorna
     if (nomeJaExiste) {
       alert("Já existe uma lista com esse nome, selecione ela.");
       return;
     }
 
     // adiciona a nova lista como selected true
-    await addList(nameList);
-    console.log(listOfLists);
+    addList(nameList);
   };
 
   const exportList = () => {
