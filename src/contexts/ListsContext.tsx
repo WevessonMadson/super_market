@@ -72,9 +72,6 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     const selectedList = newListOfList.splice(index, 1)[0];
-    console.log(selectList);
-    console.log(newListOfList);
-
     newListOfList.unshift({ ...selectedList, selected: true });
 
     setListOfLists(newListOfList);

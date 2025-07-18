@@ -182,6 +182,8 @@ export default function Home() {
     if (listProducts.length) {
       let total = calculateTotalList(listProducts);
       setStateList({ listProducts, total });
+    } else {
+      setStateList({ listProducts: [], total: 0 });
     }
   }, [listOfLists]);
 

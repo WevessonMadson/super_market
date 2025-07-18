@@ -6,9 +6,6 @@ export default function SelectListName() {
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const index = e.target.value;
-
-    console.log(index);
-
     selectList(Number(index));
   };
 
