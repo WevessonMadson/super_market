@@ -14,7 +14,7 @@ type SubMenuProps = {
 };
 
 export default function SubMenu({ onClose }: SubMenuProps) {
-  const { addList, listNameExists } = useLists();
+  const { addList, listNameExists, listOfLists, deleteList } = useLists();
 
   const addHandle = async () => {
     // pegar o nome da lista no prompt e retorna se não for passado
@@ -46,10 +46,13 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     // Abre a caixa com o nome atual da lista
     // Usuário salva depois de editar o nome
   };
-  const deleteList = () => {
-    // pergunta se deseja realmente deletar e o nome da lista
-    // não cancelamos e retornamos, sim continuamos
+  const deleteHandle = () => {
+    // pergunta se deseja realmente deletar e o nome da
+    if (!confirm(`Confirma a exclusão da lista "${listOfLists[0].nome}"?`))
+      return;
+
     // removemos a lista e salvamos
+    deleteList();
   };
   const resetList = () => {
     // zerar preço e/ou quantidade
@@ -83,7 +86,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
           <span className="descr-list">Editar Nome</span>
         </li>
 
-        <li id="deleteList" className="li-sub-menu" onClick={deleteList}>
+        <li id="deleteList" className="li-sub-menu" onClick={deleteHandle}>
           <img src={IconDeleteList} />
           <span className="descr-list">Deletar Lista</span>
         </li>

@@ -11,6 +11,7 @@ type ListsContextType = {
   selectList: (index: number) => void;
   listNameExists: (nome: string) => boolean;
   addList: (nome: string) => void;
+  deleteList: () => void;
 };
 
 const initialList = [
@@ -66,6 +67,28 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
     saveListOnLocalStorage(newListOfList);
   };
 
+  const deleteList = () => {
+    localStorage.removeItem(listOfLists[0].nome);
+
+    const newListOfList = listOfLists.filter((list, index) => {
+      if (index !== 0) {
+        if (index === 1) {
+          list.selected = true;
+        }
+
+        return list;
+      }
+    });
+
+    if (newListOfList.length !== 0) {
+      setListOfLists(newListOfList);
+      saveListOnLocalStorage(newListOfList);
+    } else {
+      setListOfLists(initialList);
+      saveListOnLocalStorage(initialList);
+    }
+  };
+
   const selectList = (index: number): void => {
     const newListOfList = listOfLists.map((list) => {
       return { ...list, selected: false };
@@ -92,6 +115,7 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
         listOfLists,
         listNameExists,
         addList,
+        deleteList,
         selectList,
       }}
     >
