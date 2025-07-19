@@ -14,7 +14,8 @@ type SubMenuProps = {
 };
 
 export default function SubMenu({ onClose }: SubMenuProps) {
-  const { addList, listNameExists, listOfLists, deleteList } = useLists();
+  const { addList, listNameExists, listOfLists, deleteList, editList } =
+    useLists();
 
   const addHandle = async () => {
     // pegar o nome da lista no prompt e retorna se não for passado
@@ -42,9 +43,24 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     // pede o json
     // faz a inserção da lista e dos produtos
   };
-  const editList = () => {
+  const editHandle = () => {
     // Abre a caixa com o nome atual da lista
-    // Usuário salva depois de editar o nome
+    const newNameForList = prompt(
+      `Digite o novo nome para a lista "${listOfLists[0].nome}":`
+    );
+    if (!newNameForList || !newNameForList.trim()) return;
+
+    // ver se não tem nenhuma com o nome
+    const nomeJaExiste = listNameExists(newNameForList);
+
+    // se tiver avisa e retorna
+    if (nomeJaExiste) {
+      alert("Já existe uma lista com esse nome, selecione ela.");
+      return;
+    }
+
+    // Salvar novo nome
+    editList(newNameForList);
   };
   const deleteHandle = () => {
     // pergunta se deseja realmente deletar e o nome da
@@ -81,7 +97,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
           <span className="descr-list">Importar Lista</span>
         </li>
 
-        <li id="editList" className="li-sub-menu" onClick={editList}>
+        <li id="editList" className="li-sub-menu" onClick={editHandle}>
           <img src={IconEditList} />
           <span className="descr-list">Editar Nome</span>
         </li>

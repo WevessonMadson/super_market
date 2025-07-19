@@ -12,6 +12,7 @@ type ListsContextType = {
   listNameExists: (nome: string) => boolean;
   addList: (nome: string) => void;
   deleteList: () => void;
+  editList: (nome: string) => void;
 };
 
 const initialList = [
@@ -89,6 +90,26 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const editList = (nome: string) => {
+    const dataList = localStorage.getItem(listOfLists[0].nome) || "[]";
+    if (JSON.parse(dataList).length !== 0) {
+      localStorage.removeItem(listOfLists[0].nome);
+
+      localStorage.setItem(nome.trim(), dataList);
+    }
+
+    const newListOfList = listOfLists.map((list, index) => {
+      if (index === 0) {
+        list.nome = nome.trim();
+      }
+
+      return list;
+    });
+
+    setListOfLists(newListOfList);
+    saveListOnLocalStorage(newListOfList);
+  };
+
   const selectList = (index: number): void => {
     const newListOfList = listOfLists.map((list) => {
       return { ...list, selected: false };
@@ -116,6 +137,7 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
         listNameExists,
         addList,
         deleteList,
+        editList,
         selectList,
       }}
     >
