@@ -151,6 +151,7 @@ export default function Home() {
     let total = calculateTotalList(listProducts);
 
     setStateList({ ...stateList, listProducts, total });
+    localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
   }
 
   function openFiltro() {
