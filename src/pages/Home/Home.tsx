@@ -11,8 +11,7 @@ import IconDelete from "../../assets/icons/delete_icon.svg";
 import IconCloseFilter from "../../assets/icons/close_icon.svg";
 import { useLists } from "../../contexts/ListsContext";
 
-type ProductType = {
-  idLista: number;
+export type ProductType = {
   nome: string;
   quantidade: number;
   preco: number;
@@ -97,7 +96,6 @@ export default function Home() {
       quantidade,
       preco,
       checked: false,
-      idLista: listOfLists[0].id,
     });
 
     let total = calculateTotalList(listProducts);
