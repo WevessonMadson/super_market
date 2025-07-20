@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import type { ProductType } from "../pages/Home/Home";
 
 export type ListType = {
-  id: number;
   nome: string;
   selected: boolean;
 };
@@ -13,11 +13,16 @@ type ListsContextType = {
   addList: (nome: string) => void;
   deleteList: () => void;
   editList: (nome: string) => void;
+  importList: (listImport: listImportType) => void;
+};
+
+type listImportType = {
+  listName: string;
+  listProducts: ProductType[];
 };
 
 const initialList = [
   {
-    id: 1,
     nome: "superMarket",
     selected: true,
   },
@@ -51,15 +56,12 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const addList = (nome: string) => {
-    const newListOfList = listOfLists
-      .map((list) => ({
-        ...list,
-        selected: false,
-      }))
-      .sort((a, b) => a.id - b.id);
+    const newListOfList = listOfLists.map((list) => ({
+      ...list,
+      selected: false,
+    }));
 
     newListOfList.unshift({
-      id: newListOfList[newListOfList.length - 1].id,
       nome,
       selected: true,
     });
@@ -110,6 +112,40 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
     saveListOnLocalStorage(newListOfList);
   };
 
+  const importList = (listImport: listImportType) => {
+    const { listName, listProducts } = listImport;
+    console.log("chegou");
+    if (listNameExists(listName)) {
+      if (
+        !confirm(
+          "Já existe uma lista com o mesmo nome.\n\nContinuar irá substituir a lista atual.\n\nDeseja continuar?"
+        )
+      ) {
+        return;
+      }
+
+      const newListOfList = listOfLists
+        .filter((list) => list.nome.trim() !== listName.trim())
+        .map((list) => ({
+          ...list,
+          selected: false,
+        }));
+
+      newListOfList.unshift({
+        nome: listName,
+        selected: true,
+      });
+
+      localStorage.setItem(listName, JSON.stringify(listProducts));
+
+      setListOfLists(newListOfList);
+      saveListOnLocalStorage(newListOfList);
+    } else {
+      localStorage.setItem(listName, JSON.stringify(listProducts));
+      addList(listName);
+    }
+  };
+
   const selectList = (index: number): void => {
     const newListOfList = listOfLists.map((list) => {
       return { ...list, selected: false };
@@ -139,6 +175,7 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteList,
         editList,
         selectList,
+        importList,
       }}
     >
       {children}

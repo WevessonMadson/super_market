@@ -14,8 +14,14 @@ type SubMenuProps = {
 };
 
 export default function SubMenu({ onClose }: SubMenuProps) {
-  const { addList, listNameExists, listOfLists, deleteList, editList } =
-    useLists();
+  const {
+    addList,
+    listNameExists,
+    listOfLists,
+    deleteList,
+    editList,
+    importList,
+  } = useLists();
 
   const addHandle = async () => {
     // pegar o nome da lista no prompt e retorna se não for passado
@@ -57,9 +63,23 @@ export default function SubMenu({ onClose }: SubMenuProps) {
 
     window.open(`https://api.whatsapp.com/send/?text=${dataCopy}`, "_blank");
   };
-  const importList = () => {
+  const importHandle = () => {
     // pede o json
+    const listImport = prompt("Cole aqui a lista...");
+
+    // verifica se tem a lista
+    if (!listImport || !listImport.trim()) return;
+
     // faz a inserção da lista e dos produtos
+    try {
+      const objListImport = JSON.parse(listImport);
+
+      importList(objListImport);
+    } catch (error) {
+      alert(
+        "Houve um erro na importação, tente copiar e colar aqui novamente."
+      );
+    }
   };
   const editHandle = () => {
     // Abre a caixa com o nome atual da lista
@@ -110,7 +130,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
           <span className="descr-list">Exportar Lista</span>
         </li>
 
-        <li id="importList" className="li-sub-menu" onClick={importList}>
+        <li id="importList" className="li-sub-menu" onClick={importHandle}>
           <img src={IconIosShareList} />
           <span className="descr-list">Importar Lista</span>
         </li>
