@@ -35,9 +35,27 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     addList(nameList);
   };
 
-  const exportList = () => {
+  const exportHandle = () => {
     // pega os dados da lista
+    const listProducts = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    );
+
+    // validar se existe lista
+    if (!listProducts || !listProducts.length) {
+      alert("Não é possível exportar uma lista vazia.");
+      return;
+    }
+
     // monta o json e chama o envio para whatsapp
+    const objectListExport = {
+      listName: listOfLists[0].nome,
+      listProducts,
+    };
+
+    const dataCopy = JSON.stringify(objectListExport);
+
+    window.open(`https://api.whatsapp.com/send/?text=${dataCopy}`, "_blank");
   };
   const importList = () => {
     // pede o json
@@ -87,7 +105,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
           <span className="descr-list">Nova Lista</span>
         </li>
 
-        <li id="exportList" className="li-sub-menu" onClick={exportList}>
+        <li id="exportList" className="li-sub-menu" onClick={exportHandle}>
           <img src={IconShareList} />
           <span className="descr-list">Exportar Lista</span>
         </li>
