@@ -20,7 +20,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     listOfLists,
     deleteList,
     editList,
-    importList,
+    selectList,
   } = useLists();
 
   const addHandle = async () => {
@@ -67,14 +67,32 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     // pede o json
     const listImport = prompt("Cole aqui a lista...");
 
-    // verifica se tem a lista
+    // verifica se tem texto no campo
     if (!listImport || !listImport.trim()) return;
 
     // faz a inserção da lista e dos produtos
     try {
       const objListImport = JSON.parse(listImport);
 
-      importList(objListImport);
+      const { listName, listProducts } = objListImport;
+
+      if (!listNameExists(listName)) {
+        localStorage.setItem(listName, JSON.stringify(listProducts));
+        addList(listName);
+      } else {
+        if (
+          !confirm(
+            "Já existe uma lista com o mesmo nome.\n\nContinuar irá substituir a lista atual.\n\nDeseja continuar?"
+          )
+        )
+          return;
+
+        localStorage.setItem(listName, JSON.stringify(listProducts));
+        const indexListExists = listOfLists.findIndex(
+          (list) => list.nome.trim() == listName.trim()
+        );
+        selectList(indexListExists);
+      }
     } catch (error) {
       alert(
         "Houve um erro na importação, tente copiar e colar aqui novamente."
