@@ -10,6 +10,7 @@ import IconFilterCart from "../../assets/icons/filter_alt_icon.svg";
 import IconDelete from "../../assets/icons/delete_icon.svg";
 import IconCloseFilter from "../../assets/icons/close_icon.svg";
 import { useLists } from "../../contexts/ListsContext";
+import ModalClearProducts from "../../components/ModalClearProducts/ModalClearProducts";
 
 export type ProductType = {
   nome: string;
@@ -28,6 +29,7 @@ export default function Home() {
   const { originalConfig } = useSettings();
   const { isSubMenuOpen, toggleSubMenu } = useMenu();
   const { listOfLists } = useLists();
+  const [isModalClearOpen, setIsModalClearOpen] = useState(false);
 
   const inputDescricao = useRef<HTMLInputElement>(null);
 
@@ -41,6 +43,10 @@ export default function Home() {
     quantidade: 1,
     preco: 0,
   });
+
+  const toggleModalClear = () => {
+    setIsModalClearOpen((prev) => !prev);
+  };
 
   const selectContent = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.select();
@@ -188,7 +194,10 @@ export default function Home() {
 
   return (
     <>
-      {isSubMenuOpen && <SubMenu onClose={toggleSubMenu} />}
+      {isSubMenuOpen && (
+        <SubMenu onClose={toggleSubMenu} openModalClear={toggleModalClear} />
+      )}
+      {isModalClearOpen && <ModalClearProducts onClose={toggleModalClear} />}
       <div id="app">
         <form onSubmit={addProduct}>
           <div id="formDataCad">
