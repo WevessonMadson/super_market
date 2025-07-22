@@ -131,9 +131,31 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
     deleteList();
   };
 
-  const duplicateList = () => {
-    // criar uma nova lista com o nome fornecido
-    // salvar uma lista de produtos no local storage com o nome da lista
+  const duplicateHandle = () => {
+    const newNameList = prompt("Informe um nome para a lista que será criada:");
+
+    if (!newNameList || !newNameList.trim()) return;
+
+    if (listNameExists(newNameList)) {
+      alert("Já existe uma lista com esse nome, tente outro.");
+
+      return;
+    }
+
+    const listProducts = localStorage.getItem(listOfLists[0].nome) || "[]";
+
+    localStorage.setItem(newNameList, listProducts);
+
+    addList(newNameList);
+
+    if (
+      JSON.parse(listProducts).length &&
+      confirm(
+        "Quer realizar o zeramento de quantidades e/ou preços dessa nova lista?"
+      )
+    ) {
+      openModalClear();
+    }
   };
 
   return (
@@ -169,7 +191,11 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
           <span className="descr-list">Zerar preço/quantidade</span>
         </li>
 
-        <li id="duplicateList" className="li-sub-menu" onClick={duplicateList}>
+        <li
+          id="duplicateList"
+          className="li-sub-menu"
+          onClick={duplicateHandle}
+        >
           <img src={IconDuplicateLista} />
           <span className="descr-list">Duplicar lista</span>
         </li>
