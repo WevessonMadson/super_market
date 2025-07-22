@@ -11,9 +11,10 @@ import { useLists } from "../../contexts/ListsContext";
 
 type SubMenuProps = {
   onClose: () => void;
+  openModalClear: () => void;
 };
 
-export default function SubMenu({ onClose }: SubMenuProps) {
+export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
   const {
     addList,
     listNameExists,
@@ -63,6 +64,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
 
     window.open(`https://api.whatsapp.com/send/?text=${dataCopy}`, "_blank");
   };
+
   const importHandle = () => {
     // pede o json
     const listImport = prompt("Cole aqui a lista...");
@@ -99,6 +101,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
       );
     }
   };
+
   const editHandle = () => {
     // Abre a caixa com o nome atual da lista
     const newNameForList = prompt(
@@ -118,6 +121,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     // Salvar novo nome
     editList(newNameForList);
   };
+
   const deleteHandle = () => {
     // pergunta se deseja realmente deletar e o nome da
     if (!confirm(`Confirma a exclusão da lista "${listOfLists[0].nome}"?`))
@@ -126,10 +130,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
     // removemos a lista e salvamos
     deleteList();
   };
-  const resetList = () => {
-    // zerar preço e/ou quantidade
-    // obs.: aqui vou precisar abrir um modal
-  };
+
   const duplicateList = () => {
     // criar uma nova lista com o nome fornecido
     // salvar uma lista de produtos no local storage com o nome da lista
@@ -163,7 +164,7 @@ export default function SubMenu({ onClose }: SubMenuProps) {
           <span className="descr-list">Deletar Lista</span>
         </li>
 
-        <li id="resetList" className="li-sub-menu" onClick={resetList}>
+        <li id="resetList" className="li-sub-menu" onClick={openModalClear}>
           <img src={IconZeraLista} />
           <span className="descr-list">Zerar preço/quantidade</span>
         </li>
