@@ -63,13 +63,14 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const config = getConfigOnLocalStorage();
-    if (!settingsIquals()) {
+
+    if (config.sumOnlyChecked !== originalConfig.sumOnlyChecked) {
       setConfigState(config);
       setOriginalConfig(config);
       return;
+    } else {
+      saveConfig();
     }
-
-    saveConfig();
   }, []);
 
   return (
