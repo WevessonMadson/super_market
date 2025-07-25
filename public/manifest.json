@@ -210,5 +210,8 @@
   "browser"
 ],
   "id":"superMarketApp?1.1.1",
-  "scope": "/"
+  "scope": "/",
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "focus-existing", "auto"]
+}
 }
