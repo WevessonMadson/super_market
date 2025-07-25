@@ -205,6 +205,10 @@
   ],
   "lang": "pt",
   "display_override": [
-    "standalone"
-  ]
+  "window-controls-overlay",
+  "standalone",
+  "browser"
+],
+  "id":"superMarketApp?1.1.1",
+  "scope": "/"
 }
