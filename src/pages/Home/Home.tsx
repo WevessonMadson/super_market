@@ -186,16 +186,29 @@ export default function Home() {
   }
 
   function atualizaSubtotalProduto(
-    index: number,
+    id: number,
     campo: "quantidade" | "preco",
     valor: number
   ): void {
-    let listProducts = stateList.listProducts;
-    listProducts[index][campo] = valor;
+    const listProducts: ProductType[] = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    );
 
-    let total = calculateTotalList(listProducts);
+    const newListProducts = listProducts.map((produto) => {
+      if (produto.id === id) produto[campo] = valor;
+      return produto;
+    });
 
-    setStateList({ ...stateList, listProducts, total });
+    let total = calculateTotalList(newListProducts);
+
+    setStateList({
+      ...stateList,
+      listProducts:
+        isFilterOpen && filterText.length > 2
+          ? filterProducts(newListProducts)
+          : newListProducts,
+      total,
+    });
     localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
   }
 
