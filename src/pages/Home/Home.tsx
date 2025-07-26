@@ -30,8 +30,11 @@ export default function Home() {
   const { isSubMenuOpen, toggleSubMenu } = useMenu();
   const { listOfLists } = useLists();
   const [isModalClearOpen, setIsModalClearOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterText, setFilterText] = useState("");
 
   const inputDescricao = useRef<HTMLInputElement>(null);
+  const inputFilterRef = useRef<HTMLInputElement>(null);
 
   const [stateList, setStateList] = useState<StateType>({
     listProducts: [],
@@ -160,21 +163,24 @@ export default function Home() {
     localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
   }
 
-  function openFiltro() {
-    // let filtro = document.querySelector("#filtro");
-    // let textoFiltro = document.querySelector("#texto-filtro");
-    // document.querySelector("#descricao-table")!.style.display = "flex";
-    // filtro.style.display = "flex";
-    // textoFiltro.current?.focus();
+  function openFilter() {
+    setIsFilterOpen(true);
+
+    setTimeout(() => {
+      inputFilterRef.current?.focus();
+    }, 50);
   }
 
-  function realizaFiltroNosProdutos(): void {
-    throw new Error("Function not implemented.");
+  function closeFilter(): void {
+    setFilterText("");
+    setIsFilterOpen(false);
   }
 
-  function closeFiltro(): void {
-    throw new Error("Function not implemented.");
-  }
+  // function realizaFiltroNosProdutos(): void {
+  //   if (filterText.length > 2) {
+  //   } else if (filterText.length == 0) {
+  //   }
+  // }
 
   useEffect(() => {
     setTitle("Home");
@@ -277,21 +283,25 @@ export default function Home() {
                   Descrição
                   <img
                     id="icone-filtro"
-                    onClick={openFiltro}
+                    onClick={openFilter}
                     src={IconFilterCart}
                   />
-                  <div id="filtro">
-                    <input
-                      type="text"
-                      placeholder="produto..."
-                      id="texto-filtro"
-                      onInput={realizaFiltroNosProdutos}
-                      onFocus={selectContent}
-                    />
-                    <button onClick={closeFiltro}>
-                      <img src={IconCloseFilter} />
-                    </button>
-                  </div>
+                  {isFilterOpen && (
+                    <div id="filtro">
+                      <input
+                        ref={inputFilterRef}
+                        type="text"
+                        placeholder="produto..."
+                        id="texto-filtro"
+                        value={filterText}
+                        onChange={(e) => setFilterText(e.target.value)}
+                        onFocus={selectContent}
+                      />
+                      <button onClick={closeFilter}>
+                        <img src={IconCloseFilter} />
+                      </button>
+                    </div>
+                  )}
                 </th>
                 <th>Qtd</th>
                 <th>Preço</th>

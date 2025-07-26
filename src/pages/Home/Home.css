@@ -89,9 +89,10 @@
 #filtro {
   background-color: #fff;
   position: absolute;
+  top: 0px;
   left: 25px;
   max-width: 120px;
-  display: none;
+  display: flex;
   border: 1px solid #000;
   gap: 3px;
   border-radius: 3px;
