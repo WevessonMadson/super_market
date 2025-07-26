@@ -13,6 +13,7 @@ import { useLists } from "../../contexts/ListsContext";
 import ModalClearProducts from "../../components/ModalClearProducts/ModalClearProducts";
 
 export type ProductType = {
+  id: number;
   nome: string;
   quantidade: number;
   preco: number;
@@ -86,11 +87,24 @@ export default function Home() {
     return noCheck.concat(check);
   }
 
+  function lastIdProduct(listProducts: ProductType[]) {
+    let lastId = 0;
+    if (listProducts.length > 0) {
+      listProducts.forEach((produto) => {
+        if (produto.id > lastId) lastId = produto.id;
+      });
+    }
+
+    return lastId;
+  }
+
   function addProduct(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     let { descricao, quantidade, preco } = productDataForm;
-    const listProducts = stateList.listProducts;
+    const listProducts: ProductType[] = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    );
 
     if (descricao.trim() === "") {
       alert("É necessário preencher a descrição.");
@@ -101,39 +115,45 @@ export default function Home() {
     if (quantidade === 0) quantidade = 1;
 
     listProducts.push({
+      id: lastIdProduct(listProducts) + 1,
       nome: descricao,
       quantidade,
       preco,
       checked: false,
     });
 
+    localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
+
     let total = calculateTotalList(listProducts);
     setStateList({ ...stateList, listProducts, total });
 
-    localStorage.setItem(
-      listOfLists[0].nome,
-      JSON.stringify(stateList.listProducts)
-    );
-
-    // closeFiltro();
-
+    closeFilter();
     setProductDataForm({ descricao: "", quantidade: 1, preco: 0 });
     inputDescricao.current?.focus();
   }
 
-  function deleteProduct(index: number) {
-    if (
-      confirm(
-        `Confirma a exclusão do produto: "${stateList.listProducts[index].nome}"?`
-      )
-    ) {
-      const listProducts = stateList.listProducts.filter(
-        (_, indiceProduto) => indiceProduto !== index
+  function deleteProduct(id: number, nomeProduto: string) {
+    if (confirm(`Confirma a exclusão do produto: "${nomeProduto}"?`)) {
+      const listProducts: ProductType[] = JSON.parse(
+        localStorage.getItem(listOfLists[0].nome) || "[]"
       );
 
-      let total = calculateTotalList(listProducts);
-      setStateList({ ...stateList, listProducts, total });
-      localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
+      const newListProducts = listProducts.filter(
+        (produto) => produto.id !== id
+      );
+
+      let total = calculateTotalList(newListProducts);
+      setStateList({
+        ...stateList,
+        listProducts: isFilterOpen
+          ? filterProducts(newListProducts)
+          : newListProducts,
+        total,
+      });
+      localStorage.setItem(
+        listOfLists[0].nome,
+        JSON.stringify(newListProducts)
+      );
     }
   }
 
@@ -176,11 +196,36 @@ export default function Home() {
     setIsFilterOpen(false);
   }
 
-  // function realizaFiltroNosProdutos(): void {
-  //   if (filterText.length > 2) {
-  //   } else if (filterText.length == 0) {
-  //   }
-  // }
+  function filterProducts(listProducts: ProductType[]): ProductType[] {
+    return listProducts.filter((produto) =>
+      produto.nome
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .includes(
+          filterText
+            .trim()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+        )
+    );
+  }
+
+  function realizaFiltroNosProdutos(): void {
+    const allProducts: ProductType[] = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    );
+
+    const total = allProducts.length > 0 ? calculateTotalList(allProducts) : 0;
+
+    if (filterText.length > 2) {
+      const productsFilters = filterProducts(allProducts);
+      setStateList({ listProducts: productsFilters, total });
+    } else if (filterText.length == 0) {
+      setStateList({ listProducts: allProducts, total });
+    }
+  }
 
   useEffect(() => {
     setTitle("Home");
@@ -196,7 +241,10 @@ export default function Home() {
     } else {
       setStateList({ listProducts: [], total: 0 });
     }
+    closeFilter();
   }, [listOfLists]);
+
+  useEffect(realizaFiltroNosProdutos, [filterText]);
 
   return (
     <>
@@ -312,15 +360,12 @@ export default function Home() {
             <tbody id="tbody">
               {stateList.listProducts.length > 0 &&
                 stateList.listProducts.map(
-                  (
-                    { nome, quantidade, preco, checked }: ProductType,
-                    index
-                  ) => (
-                    <tr className="trTableValue" key={index}>
+                  ({ id, nome, quantidade, preco, checked }: ProductType) => (
+                    <tr className="trTableValue" key={id}>
                       <td>
                         <input
                           type="checkbox"
-                          onChange={() => reorganizar(index)}
+                          onChange={() => reorganizar(id)}
                           checked={checked}
                         />
                       </td>
@@ -331,7 +376,7 @@ export default function Home() {
                           onFocus={selectContent}
                           onChange={(e) =>
                             atualizaSubtotalProduto(
-                              index,
+                              id,
                               "quantidade",
                               Number(e.target.value)
                             )
@@ -346,7 +391,7 @@ export default function Home() {
                           onFocus={selectContent}
                           onChange={(e) =>
                             atualizaSubtotalProduto(
-                              index,
+                              id,
                               "preco",
                               Number(e.target.value)
                             )
@@ -360,7 +405,7 @@ export default function Home() {
                       </td>
                       <td
                         className="action"
-                        onClick={() => deleteProduct(index)}
+                        onClick={() => deleteProduct(id, nome)}
                       >
                         <img src={IconDelete} />
                       </td>
