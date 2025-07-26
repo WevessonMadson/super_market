@@ -145,9 +145,10 @@ export default function Home() {
       let total = calculateTotalList(newListProducts);
       setStateList({
         ...stateList,
-        listProducts: isFilterOpen
-          ? filterProducts(newListProducts)
-          : newListProducts,
+        listProducts:
+          isFilterOpen && filterText.length > 2
+            ? filterProducts(newListProducts)
+            : newListProducts,
         total,
       });
       localStorage.setItem(
@@ -157,16 +158,31 @@ export default function Home() {
     }
   }
 
-  function reorganizar(index: number) {
-    let listProducts = stateList.listProducts;
-    listProducts[index].checked = !listProducts[index].checked;
+  function reorganizar(id: number) {
+    const listProducts: ProductType[] = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    );
 
-    listProducts = orderByChecked(listProducts);
+    const newListProducts = orderByChecked(
+      listProducts.map((produto) => {
+        if (produto.id === id) produto.checked = !produto.checked;
 
-    let total = calculateTotalList(listProducts);
+        return produto;
+      })
+    );
 
-    setStateList({ ...stateList, listProducts, total });
-    localStorage.setItem(listOfLists[0].nome, JSON.stringify(listProducts));
+    let total = calculateTotalList(newListProducts);
+
+    setStateList({
+      ...stateList,
+      listProducts:
+        isFilterOpen && filterText.length > 2
+          ? filterProducts(newListProducts)
+          : newListProducts,
+      total,
+    });
+
+    localStorage.setItem(listOfLists[0].nome, JSON.stringify(newListProducts));
   }
 
   function atualizaSubtotalProduto(
