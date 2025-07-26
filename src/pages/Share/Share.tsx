@@ -9,10 +9,10 @@ export default function Share() {
   const { setTitle } = usePageTitle();
 
   const shareContent = {
-    title: "SuperMaket",
+    title: "Super Market",
     message:
       "Ei, baixa o melhor app de listas de compras do mundo!\nÉ muito útil. E grátis.",
-    url: "https://wevessonmadson.github.io/superMarket",
+    url: "https://super-market-gamma.vercel.app",
   };
 
   useEffect(() => {
