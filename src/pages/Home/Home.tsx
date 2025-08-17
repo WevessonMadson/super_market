@@ -44,8 +44,8 @@ export default function Home() {
 
   const [productDataForm, setProductDataForm] = useState({
     descricao: "",
-    quantidade: 1,
-    preco: 0,
+    quantidade: "1",
+    preco: "0",
   });
 
   const toggleModalClear = () => {
@@ -101,12 +101,15 @@ export default function Home() {
   function addProduct(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    let { descricao, quantidade, preco } = productDataForm;
+    let descricao = productDataForm.descricao.trim();
+    let quantidade = Number(productDataForm.quantidade);
+    let preco = Number(productDataForm.preco);
+
     const listProducts: ProductType[] = JSON.parse(
       localStorage.getItem(listOfLists[0].nome) || "[]"
     );
 
-    if (descricao.trim() === "") {
+    if (descricao === "") {
       alert("É necessário preencher a descrição.");
       inputDescricao.current?.focus();
       return;
@@ -128,7 +131,7 @@ export default function Home() {
     setStateList({ ...stateList, listProducts, total });
 
     closeFilter();
-    setProductDataForm({ descricao: "", quantidade: 1, preco: 0 });
+    setProductDataForm({ descricao: "", quantidade: "1", preco: "0" });
     inputDescricao.current?.focus();
   }
 
@@ -310,12 +313,25 @@ export default function Home() {
                 step="0.001"
                 value={productDataForm.quantidade}
                 onFocus={selectContent}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const val = e.target.value;
+
+                  // Evita "0" automático quando apaga
+                  if (val === "") {
+                    setProductDataForm({ ...productDataForm, quantidade: "" });
+                    return;
+                  }
+
+                  // Se digitar ponto final, ignora
+                  if (val.endsWith(".")) {
+                    return;
+                  }
+
                   setProductDataForm({
                     ...productDataForm,
-                    quantidade: Number(e.target.value),
-                  })
-                }
+                    quantidade: val,
+                  });
+                }}
               />
               <input
                 type="number"
@@ -323,12 +339,23 @@ export default function Home() {
                 step="0.01"
                 value={productDataForm.preco}
                 onFocus={selectContent}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const val = e.target.value;
+
+                  if (val === "") {
+                    setProductDataForm({ ...productDataForm, preco: "" });
+                    return;
+                  }
+
+                  if (val.endsWith(".")) {
+                    return;
+                  }
+
                   setProductDataForm({
                     ...productDataForm,
-                    preco: Number(e.target.value),
-                  })
-                }
+                    preco: val,
+                  });
+                }}
               />
             </div>
             <div>
