@@ -316,13 +316,6 @@ export default function Home() {
                 onChange={(e) => {
                   const val = e.target.value;
 
-                  // Evita "0" automático quando apaga
-                  if (val === "") {
-                    setProductDataForm({ ...productDataForm, quantidade: "" });
-                    return;
-                  }
-
-                  // Se digitar ponto final, ignora
                   if (val.endsWith(".")) {
                     return;
                   }
@@ -341,11 +334,6 @@ export default function Home() {
                 onFocus={selectContent}
                 onChange={(e) => {
                   const val = e.target.value;
-
-                  if (val === "") {
-                    setProductDataForm({ ...productDataForm, preco: "" });
-                    return;
-                  }
 
                   if (val.endsWith(".")) {
                     return;
