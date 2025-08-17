@@ -430,30 +430,38 @@ export default function Home() {
                         <input
                           type="number"
                           onFocus={selectContent}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const val = e.target.value;
+
+                            if (val.endsWith(".")) {
+                              return;
+                            }
+
                             atualizaSubtotalProduto(
                               id,
                               "quantidade",
-                              Number(e.target.value)
-                            )
-                          }
+                              Number(val)
+                            );
+                          }}
                           className="inputQtd"
-                          value={quantidade}
+                          value={quantidade === 0 ? "" : quantidade}
                         />
                       </td>
                       <td>
                         <input
                           type="number"
                           onFocus={selectContent}
-                          onChange={(e) =>
-                            atualizaSubtotalProduto(
-                              id,
-                              "preco",
-                              Number(e.target.value)
-                            )
-                          }
+                          onChange={(e) => {
+                            const val = e.target.value;
+
+                            if (val.endsWith(".")) {
+                              return;
+                            }
+
+                            atualizaSubtotalProduto(id, "preco", Number(val));
+                          }}
                           className="inputPreco"
-                          value={preco}
+                          value={preco === 0 ? "" : preco}
                         />
                       </td>
                       <td className="total">
