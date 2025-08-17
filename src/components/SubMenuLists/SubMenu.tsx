@@ -7,7 +7,9 @@ import IconEditList from "../../assets/icons/edit_24_submenu.svg";
 import IconDeleteList from "../../assets/icons/delete_icon.svg";
 import IconZeraLista from "../../assets/icons/restart_alt_24_submenu.svg";
 import IconDuplicateLista from "../../assets/icons/file_copy_submenu.svg";
+import IconDividerList from "../../assets/icons/divider_icon_submenu.svg";
 import { useLists } from "../../contexts/ListsContext";
+import type { ProductType } from "../../pages/Home/Home";
 
 type SubMenuProps = {
   onClose: () => void;
@@ -158,6 +160,47 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
     }
   };
 
+  const dividerHandle = (): void => {
+    const listProducts = JSON.parse(
+      localStorage.getItem(listOfLists[0].nome) || "[]"
+    ) as ProductType[];
+
+    if (
+      listProducts.length === 0 ||
+      listProducts.filter((product) => product.checked === false).length === 0
+    ) {
+      alert("Não existe produtos não marcados na lista. operação cancelada.");
+      return;
+    }
+
+    if (
+      confirm(
+        "Será criada uma nova lista com os produtos que não estão marcados. Deseja continuar?"
+      )
+    ) {
+      const newNameList = prompt(
+        "Informe um nome para a lista que será criada:"
+      );
+
+      if (!newNameList || !newNameList.trim()) return;
+
+      if (listNameExists(newNameList)) {
+        alert("Já existe uma lista com esse nome, tente outro.");
+
+        return;
+      }
+
+      localStorage.setItem(
+        newNameList,
+        JSON.stringify(
+          listProducts.filter((produto) => produto.checked === false)
+        )
+      );
+
+      addList(newNameList);
+    }
+  };
+
   return (
     <div className="fade sub-menu" onClick={onClose}>
       <ul id="sub-menu">
@@ -198,6 +241,11 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
         >
           <img src={IconDuplicateLista} />
           <span className="descr-list">Duplicar lista</span>
+        </li>
+
+        <li id="dividerList" className="li-sub-menu" onClick={dividerHandle}>
+          <img src={IconDividerList} />
+          <span className="descr-list">Dividir lista</span>
         </li>
       </ul>
     </div>
