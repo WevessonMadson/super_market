@@ -13,7 +13,7 @@ type SettingsContextType = {
 };
 
 const initialConfig = {
-  sumOnlyChecked: false,
+  sumOnlyChecked: true,
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
