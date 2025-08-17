@@ -117,7 +117,7 @@ export default function Home() {
 
     if (quantidade === 0) quantidade = 1;
 
-    listProducts.push({
+    listProducts.unshift({
       id: lastIdProduct(listProducts) + 1,
       nome: descricao,
       quantidade,
