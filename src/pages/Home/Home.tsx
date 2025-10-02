@@ -115,8 +115,6 @@ export default function Home() {
       return;
     }
 
-    if (quantidade === 0) quantidade = 1;
-
     listProducts.unshift({
       id: lastIdProduct(listProducts) + 1,
       nome: descricao,
