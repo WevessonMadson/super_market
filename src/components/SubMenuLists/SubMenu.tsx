@@ -197,6 +197,13 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
         )
       );
 
+      localStorage.setItem(
+        listOfLists[0].nome,
+        JSON.stringify(
+          listProducts.filter((produto) => produto.checked)
+        )
+      );
+
       addList(newNameList);
     }
   };
