@@ -1,6 +1,6 @@
 // This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
 
-const CACHE = "super-market-1.0.0.1";
+const CACHE = "super-market-1.0.0.2";
 
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js"
