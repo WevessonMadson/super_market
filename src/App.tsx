@@ -12,31 +12,34 @@ import Layout from "./components/Layout/Layout";
 import { PageTitleProvider } from "./contexts/PageTitleContext";
 import { SettingsProvider } from "./contexts/SetingsContext";
 import { ListsProvider } from "./contexts/ListsContext";
+import { LoadingProvider } from "./contexts/LoadingContext";
 
 function App() {
   return (
-    <SettingsProvider>
-      <PageTitleProvider>
-        <MenuProvider>
-          <ListsProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/lists" element={<Lists />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/share" element={<Share />} />
-                  <Route path="/sugestion" element={<Suggestion />} />
-                  <Route path="/import" element={<ImportList />} />
-                </Route>
-                <Route path="/privacite" element={<Privacy />} />
-              </Routes>
-            </BrowserRouter>
-          </ListsProvider>
-        </MenuProvider>
-      </PageTitleProvider>
-    </SettingsProvider>
+    <LoadingProvider>
+      <SettingsProvider>
+        <PageTitleProvider>
+          <MenuProvider>
+            <ListsProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route element={<Layout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/lists" element={<Lists />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/share" element={<Share />} />
+                    <Route path="/sugestion" element={<Suggestion />} />
+                    <Route path="/import" element={<ImportList />} />
+                  </Route>
+                  <Route path="/privacite" element={<Privacy />} />
+                </Routes>
+              </BrowserRouter>
+            </ListsProvider>
+          </MenuProvider>
+        </PageTitleProvider>
+      </SettingsProvider>
+    </LoadingProvider>
   );
 }
 

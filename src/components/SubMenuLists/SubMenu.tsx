@@ -2,7 +2,6 @@ import "./SubMenu.css";
 
 import IconAddList from "../../assets/icons/add_icon_submenu.svg";
 import IconShareList from "../../assets/icons/share_24px_submenu.svg";
-// import IconIosShareList from "../../assets/icons/ios_share_24_submenu.svg";
 import IconEditList from "../../assets/icons/edit_24_submenu.svg";
 import IconDeleteList from "../../assets/icons/delete_icon.svg";
 import IconZeraLista from "../../assets/icons/restart_alt_24_submenu.svg";
@@ -10,6 +9,7 @@ import IconDuplicateLista from "../../assets/icons/file_copy_submenu.svg";
 import IconDividerList from "../../assets/icons/divider_icon_submenu.svg";
 import { useLists } from "../../contexts/ListsContext";
 import type { ProductType } from "../../pages/Home/Home";
+import { useLoading } from "../../contexts/LoadingContext";
 
 type SubMenuProps = {
   onClose: () => void;
@@ -24,6 +24,8 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
     deleteList,
     editList,
   } = useLists();
+
+  const { setIsLoading } = useLoading();
 
   const addHandle = async () => {
     // pegar o nome da lista no prompt e retorna se não for passado
@@ -44,6 +46,8 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
   };
 
   const exportHandle = async () => {
+    setIsLoading(true);
+
     // pega os dados da lista
     const listProducts = JSON.parse(
       localStorage.getItem(listOfLists[0].nome) || "[]"
@@ -61,8 +65,6 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
       listProducts,
     };
 
-    // const dataCopy = JSON.stringify(objectListExport);
-
     try {
       const res = await fetch("/api/save", {
         method: "POST",
@@ -78,47 +80,10 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
     } catch (err) {
       alert("Erro ao exportar." );
+    } finally {
+      setIsLoading(false);
     }
-
-    // window.open(`https://api.whatsapp.com/send/?text=${dataCopy}`, "_blank");
   };
-
-  // const importHandle = (listImport: string) => {
-  //   // pede o json
-  //   // const listImport = prompt("Cole aqui a lista...");
-
-  //   // verifica se tem texto no campo
-  //   if (!listImport || !listImport.trim()) return;
-
-  //   // faz a inserção da lista e dos produtos
-  //   try {
-  //     const objListImport = JSON.parse(listImport);
-
-  //     const { listName, listProducts } = objListImport;
-
-  //     if (!listNameExists(listName)) {
-  //       localStorage.setItem(listName, JSON.stringify(listProducts));
-  //       addList(listName);
-  //     } else {
-  //       if (
-  //         !confirm(
-  //           "Já existe uma lista com o mesmo nome.\n\nContinuar irá substituir a lista atual.\n\nDeseja continuar?"
-  //         )
-  //       )
-  //         return;
-
-  //       localStorage.setItem(listName, JSON.stringify(listProducts));
-  //       const indexListExists = listOfLists.findIndex(
-  //         (list) => list.nome.trim() == listName.trim()
-  //       );
-  //       selectList(indexListExists);
-  //     }
-  //   } catch (error) {
-  //     alert(
-  //       "Houve um erro na importação, tente copiar e colar aqui novamente."
-  //     );
-  //   }
-  // };
 
   const editHandle = () => {
     // Abre a caixa com o nome atual da lista

@@ -4,6 +4,7 @@ import { useLists } from "../../contexts/ListsContext";
 import { usePageTitle } from "../../contexts/PageTitleContext";
 
 import "./ImportList.css";
+import { useLoading } from "../../contexts/LoadingContext";
 
 function ImportList() {
   const { setTitle } = usePageTitle();
@@ -15,6 +16,7 @@ function ImportList() {
     } = useLists();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { setIsLoading } = useLoading();
 
   const importHandle = (listImport: string) => {
     // pede o json
@@ -72,6 +74,7 @@ function ImportList() {
     }
 
     (async () => {
+      setIsLoading(true);
       try {
         const lista = await carregarLista(id);
         importHandle(JSON.stringify(lista));
@@ -80,12 +83,13 @@ function ImportList() {
         console.error(err);
         alert("Erro ao importar lista 😞");
       } finally {
+        setIsLoading(false);
         navigate("/");
       }
     })();
   }, []);
 
-  return <p id="load">Carregando...</p>;
+  return <></>;
 }
 
 export default ImportList;
