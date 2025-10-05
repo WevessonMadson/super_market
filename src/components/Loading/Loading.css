@@ -1,0 +1,12 @@
+.fade__loading {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    opacity: 0.96;
+    color: #fff;
+}
