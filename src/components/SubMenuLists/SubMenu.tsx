@@ -2,7 +2,7 @@ import "./SubMenu.css";
 
 import IconAddList from "../../assets/icons/add_icon_submenu.svg";
 import IconShareList from "../../assets/icons/share_24px_submenu.svg";
-import IconIosShareList from "../../assets/icons/ios_share_24_submenu.svg";
+// import IconIosShareList from "../../assets/icons/ios_share_24_submenu.svg";
 import IconEditList from "../../assets/icons/edit_24_submenu.svg";
 import IconDeleteList from "../../assets/icons/delete_icon.svg";
 import IconZeraLista from "../../assets/icons/restart_alt_24_submenu.svg";
@@ -44,7 +44,7 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
     addList(nameList);
   };
 
-  const exportHandle = () => {
+  const exportHandle = async () => {
     // pega os dados da lista
     const listProducts = JSON.parse(
       localStorage.getItem(listOfLists[0].nome) || "[]"
@@ -62,47 +62,64 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
       listProducts,
     };
 
-    const dataCopy = JSON.stringify(objectListExport);
+    // const dataCopy = JSON.stringify(objectListExport);
 
-    window.open(`https://api.whatsapp.com/send/?text=${dataCopy}`, "_blank");
-  };
-
-  const importHandle = () => {
-    // pede o json
-    const listImport = prompt("Cole aqui a lista...");
-
-    // verifica se tem texto no campo
-    if (!listImport || !listImport.trim()) return;
-
-    // faz a inserção da lista e dos produtos
     try {
-      const objListImport = JSON.parse(listImport);
+      const res = await fetch("/api/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(objectListExport),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || JSON.stringify(data));
 
-      const { listName, listProducts } = objListImport;
-
-      if (!listNameExists(listName)) {
-        localStorage.setItem(listName, JSON.stringify(listProducts));
-        addList(listName);
-      } else {
-        if (
-          !confirm(
-            "Já existe uma lista com o mesmo nome.\n\nContinuar irá substituir a lista atual.\n\nDeseja continuar?"
-          )
-        )
-          return;
-
-        localStorage.setItem(listName, JSON.stringify(listProducts));
-        const indexListExists = listOfLists.findIndex(
-          (list) => list.nome.trim() == listName.trim()
-        );
-        selectList(indexListExists);
-      }
-    } catch (error) {
-      alert(
-        "Houve um erro na importação, tente copiar e colar aqui novamente."
-      );
+      const id = data.id;
+      const link = `${window.location.origin}/import?id=${encodeURIComponent(id)}`;
+      const text = `Minha lista de compras: ${link}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+    } catch (err) {
+      alert("Erro ao exportar." );
     }
+
+    // window.open(`https://api.whatsapp.com/send/?text=${dataCopy}`, "_blank");
   };
+
+  // const importHandle = (listImport: string) => {
+  //   // pede o json
+  //   // const listImport = prompt("Cole aqui a lista...");
+
+  //   // verifica se tem texto no campo
+  //   if (!listImport || !listImport.trim()) return;
+
+  //   // faz a inserção da lista e dos produtos
+  //   try {
+  //     const objListImport = JSON.parse(listImport);
+
+  //     const { listName, listProducts } = objListImport;
+
+  //     if (!listNameExists(listName)) {
+  //       localStorage.setItem(listName, JSON.stringify(listProducts));
+  //       addList(listName);
+  //     } else {
+  //       if (
+  //         !confirm(
+  //           "Já existe uma lista com o mesmo nome.\n\nContinuar irá substituir a lista atual.\n\nDeseja continuar?"
+  //         )
+  //       )
+  //         return;
+
+  //       localStorage.setItem(listName, JSON.stringify(listProducts));
+  //       const indexListExists = listOfLists.findIndex(
+  //         (list) => list.nome.trim() == listName.trim()
+  //       );
+  //       selectList(indexListExists);
+  //     }
+  //   } catch (error) {
+  //     alert(
+  //       "Houve um erro na importação, tente copiar e colar aqui novamente."
+  //     );
+  //   }
+  // };
 
   const editHandle = () => {
     // Abre a caixa com o nome atual da lista
@@ -221,10 +238,10 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
           <span className="descr-list">Exportar Lista</span>
         </li>
 
-        <li id="importList" className="li-sub-menu" onClick={importHandle}>
+        {/* <li id="importList" className="li-sub-menu" onClick={importHandle}>
           <img src={IconIosShareList} />
           <span className="descr-list">Importar Lista</span>
-        </li>
+        </li> */}
 
         <li id="editList" className="li-sub-menu" onClick={editHandle}>
           <img src={IconEditList} />

@@ -6,6 +6,7 @@ import Privacy from "./pages/Privacy/Privacy";
 import Settings from "./pages/Settings/Settings";
 import Share from "./pages/Share/Share";
 import Suggestion from "./pages/Sugestion/Suggestion";
+import ImportList from "./pages/ImportList/ImportList";
 import { MenuProvider } from "./contexts/MenuContext";
 import Layout from "./components/Layout/Layout";
 import { PageTitleProvider } from "./contexts/PageTitleContext";
@@ -27,6 +28,7 @@ function App() {
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/share" element={<Share />} />
                   <Route path="/sugestion" element={<Suggestion />} />
+                  <Route path="/import" element={<ImportList />} />
                 </Route>
                 <Route path="/privacite" element={<Privacy />} />
               </Routes>
