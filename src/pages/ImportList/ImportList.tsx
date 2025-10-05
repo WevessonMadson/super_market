@@ -18,7 +18,7 @@ function ImportList() {
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
 
-  const importHandle = (listImport: string) => {
+  const importHandle = async (listImport: string) => {
     // pede o json
     // const listImport = prompt("Cole aqui a lista...");
 
@@ -77,7 +77,7 @@ function ImportList() {
       setIsLoading(true);
       try {
         const lista = await carregarLista(id);
-        importHandle(JSON.stringify(lista));
+        await importHandle(JSON.stringify(lista));
         alert("Lista importada com sucesso!");
       } catch (err) {
         console.error(err);
