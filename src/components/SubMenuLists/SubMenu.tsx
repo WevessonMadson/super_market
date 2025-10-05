@@ -23,7 +23,6 @@ export default function SubMenu({ onClose, openModalClear }: SubMenuProps) {
     listOfLists,
     deleteList,
     editList,
-    selectList,
   } = useLists();
 
   const addHandle = async () => {
