@@ -12,6 +12,7 @@ type ListsContextType = {
   addList: (nome: string) => void;
   deleteList: () => void;
   editList: (nome: string) => void;
+  getListOnLocalStorage: () => ListType[];
 };
 
 const initialList = [
@@ -140,6 +141,7 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteList,
         editList,
         selectList,
+        getListOnLocalStorage,
       }}
     >
       {children}

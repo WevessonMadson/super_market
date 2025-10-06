@@ -11,8 +11,8 @@ function ImportList() {
   const {
       addList,
       listNameExists,
-      listOfLists,
       selectList,
+      getListOnLocalStorage
     } = useLists();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -43,6 +43,8 @@ function ImportList() {
           return;
 
         localStorage.setItem(listName, JSON.stringify(listProducts));
+
+        const listOfLists = getListOnLocalStorage();
         const indexListExists = listOfLists.findIndex(
           (list) => list.nome.trim() == listName.trim()
         );
