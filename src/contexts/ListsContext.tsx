@@ -40,6 +40,8 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const listNameExists = (nome: string): boolean => {
+    let listOfLists = getListOnLocalStorage();
+
     return (
       listOfLists.filter(
         (list) =>
@@ -49,6 +51,8 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const addList = (nome: string) => {
+    let listOfLists = getListOnLocalStorage();
+
     const newListOfList = listOfLists.map((list) => ({
       ...list,
       selected: false,
@@ -106,6 +110,8 @@ export const ListsProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const selectList = (index: number): void => {
+    let listOfLists = getListOnLocalStorage();
+
     const newListOfList = listOfLists.map((list) => {
       return { ...list, selected: false };
     });
