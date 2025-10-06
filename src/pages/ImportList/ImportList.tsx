@@ -46,7 +46,9 @@ function ImportList() {
         const indexListExists = listOfLists.findIndex(
           (list) => list.nome.trim() == listName.trim()
         );
+        
         selectList(indexListExists);
+        alert("Lista importada com sucesso!");
       }
     } catch (error) {
       alert(
@@ -78,7 +80,6 @@ function ImportList() {
       try {
         const lista = await carregarLista(id);
         await importHandle(JSON.stringify(lista));
-        alert("Lista importada com sucesso!");
       } catch (err) {
         console.error(err);
         alert("Erro ao importar lista 😞");
